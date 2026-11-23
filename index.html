@@ -1,105 +1,34 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#10131d">
-  <title>EasyBet — Sports fixtures</title>
-  <style>
-    :root{color-scheme:dark;--bg:#10131d;--panel:#191f2d;--panel2:#20283a;--text:#f5f7fb;--muted:#9ba6ba;--accent:#8cf0bd;--line:#30394c}
-    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#1b2940 0,#10131d 55%);color:var(--text);font:16px/1.5 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-    .wrap{width:min(1120px,calc(100% - 32px));margin:auto}.top{padding:28px 0 18px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .brand{font-weight:900;font-size:29px;letter-spacing:-1.3px}.brand span{color:var(--accent)}.tag{color:var(--muted);font-size:13px}
-    .hero{padding:22px 0 24px}.hero h1{font-size:clamp(28px,5vw,44px);line-height:1.08;margin:0 0 8px;letter-spacing:-1.4px}.hero p{margin:0;color:var(--muted)}
-    .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}.days{display:flex;gap:8px;flex-wrap:wrap}
-    button,.search{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:12px;padding:11px 15px;font:inherit}
-    button{cursor:pointer;font-weight:700}button.active{background:var(--accent);color:#102019;border-color:var(--accent)}
-    .search{flex:1;min-width:190px;outline:none}.sports{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px;margin:14px 0 22px}
-    .sport{padding:13px 10px;text-align:center;min-height:52px}.sport.active{background:var(--accent);color:#102019;border-color:var(--accent)}
-    .section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:24px 0 12px}.section-head h2{font-size:20px;margin:0}.muted{color:var(--muted);font-size:13px}
-    .matches{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:12px}
-    .match{background:linear-gradient(145deg,var(--panel),#151b28);border:1px solid var(--line);border-radius:17px;padding:16px}
-    .league{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:8px;margin-bottom:14px}
-    .teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}.team{font-weight:750;display:flex;align-items:center;gap:8px;min-width:0}.team:last-child{justify-content:flex-end;text-align:right}
-    .team img{width:27px;height:27px;object-fit:contain}.score{font-weight:900;font-size:20px;white-space:nowrap}.status{margin-top:13px;color:var(--muted);font-size:12px}
-    .empty{padding:26px;border:1px dashed var(--line);border-radius:16px;color:var(--muted);text-align:center;grid-column:1/-1}
-    footer{padding:35px 0 45px;color:var(--muted);font-size:12px}
-    @media(max-width:560px){.top{padding-top:20px}.brand{font-size:25px}.tag{display:none}.wrap{width:min(100% - 22px,1120px)}button{padding:10px 12px}.sports{grid-template-columns:repeat(2,1fr)}}
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <header class="top"><div class="brand">EASY<span>BET</span></div><div class="tag">Your sports. Your fixtures. One place.</div></header>
-    <section class="hero">
-      <h1>Follow the games.</h1>
-      <p>Browse upcoming fixtures and live football scores.</p>
-    </section>
-    <div class="toolbar">
-      <div class="days" id="days">
-        <button class="active" data-day="0">Today</button><button data-day="1">Tomorrow</button><button data-day="2">In 2 days</button>
-      </div>
-      <input id="search" class="search" type="search" placeholder="Search teams or leagues…" aria-label="Search teams or leagues">
-    </div>
-    <div class="section-head"><h2>Sports</h2><span class="muted">Choose a sport</span></div>
-    <nav class="sports" id="sports">
-      <button class="sport active" data-sport="football">⚽ Football</button>
-      <button class="sport" data-sport="hockey">🏒 Ice hockey</button>
-      <button class="sport" data-sport="basketball">🏀 Basketball</button>
-      <button class="sport" data-sport="tennis">🎾 Tennis</button>
-      <button class="sport" data-sport="american-football">🏈 American football</button>
-      <button class="sport" data-sport="baseball">⚾ Baseball</button>
-      <button class="sport" data-sport="volleyball">🏐 Volleyball</button>
-      <button class="sport" data-sport="handball">🤾 Handball</button>
-      <button class="sport" data-sport="combat-sports">🥊 Combat sports</button>
-    </nav>
-    <div class="section-head"><h2 id="matches-title">Football fixtures</h2><span class="muted" id="date-label"></span></div>
-    <main class="matches" id="matches"><div class="empty">Loading fixtures…</div></main>
-    <footer>EasyBet is a sports fixtures information site. Match data availability depends on the connected data provider.</footer>
-  </div>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b1020"><title>EasyBet — Match Centre</title>
+<style>
+:root{--bg:#0b1020;--p:#141e31;--p2:#1b2940;--line:#2a3952;--txt:#f5f7ff;--muted:#96a4ba;--mint:#8df2c2;--red:#ff657d}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1d3554,transparent 55%),var(--bg);color:var(--txt);font:15px/1.5 Inter,system-ui,sans-serif}.shell{width:min(1160px,calc(100% - 34px));margin:auto}header{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12}.logo{font-size:27px;font-weight:950;letter-spacing:-1.4px}.logo b{color:var(--mint)}.livehead{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#c4d0e2}.livehead i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--red);margin-right:8px}
+main{padding:28px 0 42px}.heading{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:20px}.eyebrow{color:var(--mint);font-size:10px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}.heading h1{font-size:clamp(28px,4vw,39px);letter-spacing:-1.5px;line-height:1.1;margin:5px 0 0}.date{color:var(--muted);font-size:12px}.tabs{display:flex;gap:5px;padding:5px;border:1px solid var(--line);border-radius:13px;background:#090e1b;width:max-content;margin-bottom:16px}.tab{border:0;background:none;color:var(--muted);padding:9px 20px;border-radius:9px;font-weight:800}.tab.active{background:var(--mint);color:#0a2119}.filters{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:22px}.sports{display:flex;gap:7px;flex-wrap:wrap;flex:1}.sport,.search{border:1px solid var(--line);background:var(--p);color:#bdc9dc;border-radius:10px;padding:9px 12px;font:inherit;font-size:12px;font-weight:750}.sport.active{border-color:#6ce5b1;color:var(--mint);background:var(--p2)}.search{width:205px;color:var(--txt);outline:none}.search:focus{border-color:var(--mint)}.section{display:flex;justify-content:space-between;align-items:center;margin:18px 0 12px}.section h2{font-size:16px;margin:0}.count{font-size:11px;color:var(--muted)}
+.matches{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.match{width:100%;text-align:left;color:var(--txt);background:linear-gradient(145deg,#192740,#111a2b);border:1px solid var(--line);border-radius:16px;padding:16px;transition:.18s}.match:hover{transform:translateY(-2px);border-color:#5b9c85}.meta{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:11px;margin-bottom:16px}.league{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.status{white-space:nowrap;font-weight:850}.status.live{color:var(--red)}.teams{display:grid;grid-template-columns:1fr 58px 1fr;gap:8px;align-items:center}.team{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;font-size:13px;font-weight:800;min-width:0}.crest{width:39px;height:39px;object-fit:contain;filter:drop-shadow(0 3px 5px #0006)}.teamname{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.score{text-align:center;font-size:21px;font-weight:950}.bottom{display:flex;justify-content:space-between;border-top:1px solid #ffffff12;margin-top:14px;padding-top:10px;color:var(--muted);font-size:11px}.open{color:var(--mint);font-weight:850}.empty{grid-column:1/-1;text-align:center;padding:34px 16px;border:1px dashed var(--line);border-radius:15px;color:var(--muted)}.empty strong{display:block;color:#e5ebf7;margin-bottom:5px}
+footer{text-align:center;border-top:1px solid #ffffff12;padding:20px 0 25px;color:#718099;font-size:10px;letter-spacing:.12em;font-weight:800}
+.overlay{display:none;position:fixed;inset:0;z-index:5;background:#030712c9;backdrop-filter:blur(7px);align-items:flex-end;justify-content:center;padding:18px}.overlay.show{display:flex}.drawer{width:min(670px,100%);max-height:90vh;overflow:auto;background:#111b2d;border:1px solid #35435c;border-radius:21px;padding:20px;box-shadow:0 25px 90px #000b}.dhead{display:flex;justify-content:space-between;gap:10px}.dhead h2{font-size:18px;margin:4px 0}.close{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--p2);color:white;font-size:20px}.detail-score{display:flex;align-items:center;justify-content:center;gap:18px;padding:20px 0}.dteam{width:34%;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;font-weight:800}.dteam img{width:50px;height:50px;object-fit:contain}.dmid{font-size:24px;font-weight:950;text-align:center}.dmid small{display:block;font-size:10px;color:var(--muted);margin-top:4px}.tiphead{display:flex;justify-content:space-between;align-items:center;margin:10px 0}.tiphead h3{font-size:15px;margin:0}.source{font-size:10px;color:var(--muted)}.tips{display:grid;gap:9px}.tip{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:linear-gradient(110deg,#1b2940,#141e30)}.market{font-size:10px;color:var(--muted);font-weight:900;letter-spacing:.1em;text-transform:uppercase}.value{font-size:15px;font-weight:900;margin-top:3px}.why{font-size:12px;color:#aebbd0;margin-top:5px}.notice{font-size:10px;color:#7f8da4;margin-top:13px}
+@media(max-width:700px){.shell{width:calc(100% - 22px)}header{height:65px}.logo{font-size:24px}.heading{align-items:start;flex-direction:column;gap:5px}.filters{align-items:stretch}.search{width:100%;order:-1}.matches{grid-template-columns:1fr}.overlay{padding:0}.drawer{border-radius:20px 20px 0 0;padding:18px 14px}}
+</style></head><body><div class="shell"><header><div class="logo">EASY<b>BET</b></div><div class="livehead"><i></i>Match centre</div></header><main>
+<div class="heading"><div><div class="eyebrow">Match centre</div><h1 id="title">Today’s fixtures</h1></div><div class="date" id="date"></div></div>
+<div class="tabs"><button class="tab active" data-view="today">Today</button><button class="tab" data-view="live">● Live</button></div>
+<div class="filters"><nav class="sports" id="sports"><button class="sport active" data-sport="all">All sports</button><button class="sport" data-sport="football">⚽ Football</button><button class="sport" data-sport="hockey">🏒 Ice hockey</button><button class="sport" data-sport="basketball">🏀 Basketball</button><button class="sport" data-sport="tennis">🎾 Tennis</button><button class="sport" data-sport="american-football">🏈 American football</button><button class="sport" data-sport="baseball">⚾ Baseball</button><button class="sport" data-sport="volleyball">🏐 Volleyball</button><button class="sport" data-sport="handball">🤾 Handball</button><button class="sport" data-sport="combat-sports">🥊 Combat sports</button></nav><input id="search" class="search" placeholder="Search teams or leagues…" type="search"></div>
+<div class="section"><h2 id="list-title">All fixtures</h2><span id="count" class="count"></span></div><section class="matches" id="matches"><div class="empty"><strong>Loading matches</strong>Fetching today’s fixtures…</div></section></main><footer>MADE BY R4JU</footer></div>
+<div class="overlay" id="overlay"><section class="drawer"><div class="dhead"><div><div class="eyebrow">Match analysis</div><h2 id="league">Match details</h2></div><button class="close" id="close">×</button></div><div class="detail-score" id="detail"></div><div class="tiphead"><h3 id="tip-title">Match tips</h3><span class="source" id="source"></span></div><div class="tips" id="tips"><div class="empty">Loading analysis…</div></div><p class="notice">Statistical estimates are not guarantees. Betting involves risk. If the data provider does not return enough information, tips are not invented.</p></section></div>
 <script>
-(() => {
-  const state = { day: 0, sport: "football", fixtures: [] };
-  const $ = id => document.getElementById(id);
-  const sportNames = {football:"Football",hockey:"Ice hockey",basketball:"Basketball",tennis:"Tennis","american-football":"American football",baseball:"Baseball",volleyball:"Volleyball",handball:"Handball","combat-sports":"Combat sports"};
-  const dateFor = n => { const d=new Date(); d.setDate(d.getDate()+n); return d; };
-  const dateParam = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-  const prettyDate = d => d.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"});
-  function render(){
-    const query=$("search").value.trim().toLowerCase();
-    $("matches-title").textContent = sportNames[state.sport] + " fixtures";
-    $("date-label").textContent = prettyDate(dateFor(state.day));
-    if(state.sport!=="football"){
-      $("matches").innerHTML='<div class="empty">Fixtures for this sport are not connected yet. Football fixtures are currently available.</div>';
-      return;
-    }
-    const list=state.fixtures.filter(f=>(f.teams.home.name+" "+f.teams.away.name+" "+(f.league?.name||"")).toLowerCase().includes(query));
-    if(!list.length){$("matches").innerHTML='<div class="empty">No fixtures found for this date.</div>';return;}
-    $("matches").innerHTML=list.map(f=>{
-      const home=f.teams.home, away=f.teams.away, status=f.fixture.status.short;
-      const live=["1H","HT","2H","ET","P","LIVE"].includes(status);
-      const score=(f.goals.home===null?"–":f.goals.home)+" : "+(f.goals.away===null?"–":f.goals.away);
-      const time=new Date(f.fixture.date).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
-      return `<article class="match"><div class="league"><span>${f.league?.name||"Football"} · ${f.league?.country||""}</span><span>${live?"LIVE":time}</span></div><div class="teams"><div class="team">${home.logo?`<img src="${home.logo}" alt="">`:""}<span>${home.name}</span></div><div class="score">${score}</div><div class="team">${away.name}${away.logo?`<img src="${away.logo}" alt="">`:""}</div></div><div class="status">${f.fixture.status.long||"Scheduled"}${f.fixture.status.elapsed!==null?" · "+f.fixture.status.elapsed+"'":""}</div></article>`;
-    }).join("");
-  }
-  async function load(){
-    $("matches").innerHTML='<div class="empty">Loading fixtures…</div>';
-    const d=dateFor(state.day);
-    $("date-label").textContent=prettyDate(d);
-    if(state.sport!=="football"){render();return;}
-    try{
-      const res=await fetch(`/.netlify/functions/ottelut?date=${dateParam(d)}`);
-      const data=await res.json();
-      if(!res.ok) throw new Error(data.error||"Could not load fixtures");
-      state.fixtures=data.response||[];
-      render();
-    }catch(e){$("matches").innerHTML=`<div class="empty">${e.message}. Please check the API connection and try again.</div>`;}
-  }
-  $("days").addEventListener("click",e=>{const b=e.target.closest("button[data-day]");if(!b)return;state.day=Number(b.dataset.day);document.querySelectorAll("#days button").forEach(x=>x.classList.toggle("active",x===b));load();});
-  $("sports").addEventListener("click",e=>{const b=e.target.closest("button[data-sport]");if(!b)return;state.sport=b.dataset.sport;document.querySelectorAll(".sport").forEach(x=>x.classList.toggle("active",x===b));load();});
-  $("search").addEventListener("input",render);
-  load();
-})();
-</script>
-</body>
-</html>
+(()=>{const s={view:"today",sport:"all",fixtures:[]},$=x=>document.getElementById(x),liveCodes=["1H","HT","2H","ET","P","LIVE","BT","INT"];const live=f=>liveCodes.includes(f.fixture.status.short),esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])),today=new Date(),date=x=>`${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,"0")}-${String(x.getDate()).padStart(2,"0")}`;$("date").textContent=today.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric",year:"numeric"});
+function render(){let q=$("search").value.toLowerCase().trim(),arr=s.fixtures.filter(f=>(s.view!=="live"||live(f))&&(s.sport==="all"||s.sport==="football")&&(`${f.teams.home.name} ${f.teams.away.name} ${f.league?.name||""}`).toLowerCase().includes(q));$("title").textContent=s.view==="live"?"Live matches":"Today’s fixtures";$("list-title").textContent=s.view==="live"?"Live now":s.sport==="all"?"All fixtures":"Football fixtures";$("count").textContent=arr.length+" matches";
+if(s.sport!=="all"&&s.sport!=="football"){$("matches").innerHTML='<div class="empty"><strong>Coming soon</strong>Live fixture data for this sport has not been connected yet.</div>';return}
+if(!arr.length){$("matches").innerHTML=`<div class="empty"><strong>${s.view==="live"?"No live matches right now":"No fixtures found"}</strong>${s.view==="live"?"Check back when games are in progress.":"No football fixtures match this selection today."}</div>`;return}
+$("matches").innerHTML=arr.map(f=>{let h=f.teams.home,a=f.teams.away,l=live(f),sc=f.goals.home===null||f.goals.away===null?"VS":`${f.goals.home} : ${f.goals.away}`,tm=l?`${f.fixture.status.elapsed??""}${f.fixture.status.elapsed!==null?"′":"LIVE"}`:new Date(f.fixture.date).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});return `<button class="match" data-id="${f.fixture.id}"><div class="meta"><span class="league">${esc(f.league?.country||"")} ${esc(f.league?.name||"Football")}</span><span class="status ${l?"live":""}">${l?"LIVE":esc(tm)}</span></div><div class="teams"><div class="team"><img class="crest" src="${esc(h.logo)}" alt="" onerror="this.style.visibility='hidden'"><span class="teamname">${esc(h.name)}</span></div><div class="score">${esc(sc)}</div><div class="team"><img class="crest" src="${esc(a.logo)}" alt="" onerror="this.style.visibility='hidden'"><span class="teamname">${esc(a.name)}</span></div></div><div class="bottom"><span>${l?esc(f.fixture.status.long):"Kick-off "+esc(tm)}</span><span class="open">View tips ↗</span></div></button>`}).join("")}
+async function load(){try{let r=await fetch(`/.netlify/functions/ottelut?date=${date(today)}`),d=await r.json();if(!r.ok)throw Error(d.error||"Could not load fixtures");s.fixtures=d.response||[];render()}catch(e){$("matches").innerHTML=`<div class="empty"><strong>Couldn’t load fixtures</strong>${esc(e.message)}</div>`}}
+function tip(m,v,w){return `<article class="tip"><div class="market">${esc(m)}</div><div class="value">${esc(v)}</div><div class="why">${esc(w)}</div></article>`}
+async function open(id){let f=s.fixtures.find(x=>String(x.fixture.id)===String(id));if(!f)return;let l=live(f),h=f.teams.home,a=f.teams.away;$("overlay").classList.add("show");$("league").textContent=`${f.league?.name||"Football"} · ${f.league?.country||""}`;$("detail").innerHTML=`<div class="dteam"><img src="${esc(h.logo)}"><span>${esc(h.name)}</span></div><div class="dmid">${f.goals.home??"–"} : ${f.goals.away??"–"}<small>${l?"LIVE · "+esc(f.fixture.status.long):esc(new Date(f.fixture.date).toLocaleString())}</small></div><div class="dteam"><img src="${esc(a.logo)}"><span>${esc(a.name)}</span></div>`;$("tip-title").textContent=l?"Live match tips":"Match tips";$("source").textContent="Loading provider data";$("tips").innerHTML='<div class="empty">Loading match analysis…</div>';
+try{let [pd,sd]=await Promise.all([fetch(`/.netlify/functions/ottelut?action=predictions&fixture=${id}`).then(x=>x.json()),l?fetch(`/.netlify/functions/ottelut?action=statistics&fixture=${id}`).then(x=>x.json()):Promise.resolve(null)]),p=pd.response?.[0]?.predictions,items=[];
+if(p?.advice)items.push(tip("Main pick",p.advice,"Combined recommendation from the provider’s statistical match model."));
+if(p?.winner?.name)items.push(tip("Match winner",p.winner.name,`The provider model selects ${p.winner.name} as the most likely winner.`));
+if(p?.under_over)items.push(tip("Total goals",p.under_over,"Based on the provider’s goals prediction for this fixture."));
+if(p?.win_or_draw===true&&p?.winner?.name)items.push(tip("Double chance",`${p.winner.name} or draw`,"The model indicates this team is more likely to avoid defeat."));
+if(l&&Array.isArray(sd?.response)){let n=0;sd.response.forEach(t=>(t.statistics||[]).forEach(x=>{if(/corner kicks/i.test(x.type)&&x.value!==null)n+=Number(String(x.value).replace("%",""))}));if(n>0)items.push(tip("Corners so far",`${n} total corners`,`Live match statistics currently show ${n} corners. This is a match-state indicator, not a betting pick.`))}
+$("tips").innerHTML=items.length?items.slice(0,l?2:3).join(""):'<div class="empty"><strong>Analysis not available</strong>The provider returned too little data for this match. No tips have been made up.</div>';$("source").textContent=p?"API-Football predictions":"Provider data unavailable";
+}catch(e){$("tips").innerHTML='<div class="empty"><strong>Analysis unavailable</strong>Could not retrieve predictions for this match.</div>'}}
+$("sports").onclick=e=>{let b=e.target.closest("[data-sport]");if(!b)return;s.sport=b.dataset.sport;document.querySelectorAll(".sport").forEach(x=>x.classList.toggle("active",x===b));render()};document.querySelector(".tabs").onclick=e=>{let b=e.target.closest("[data-view]");if(!b)return;s.view=b.dataset.view;document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));render()};$("matches").onclick=e=>{let b=e.target.closest("[data-id]");if(b)open(b.dataset.id)};$("search").oninput=render;$("close").onclick=()=>$("overlay").classList.remove("show");$("overlay").onclick=e=>{if(e.target===$("overlay"))$("overlay").classList.remove("show")};document.onkeydown=e=>{if(e.key==="Escape")$("overlay").classList.remove("show")};load()})();
+</script></body></html>
