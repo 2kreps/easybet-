@@ -1,51 +1,105 @@
 <!doctype html>
-<html lang="fi">
+<html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b0f14">
-<title>EasyBet — Ottelukeskus</title>
-<style>
-:root{--bg:#0b0f14;--surface:#121820;--surface2:#18212b;--line:#26313d;--text:#f4f7fa;--muted:#8e9aa8;--accent:#baf36b;--accentText:#17200e}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial}
-.wrap{max-width:1120px;margin:auto;padding:0 22px}header{height:68px;border-bottom:1px solid #ffffff10;display:flex;align-items:center}
-.head{display:flex;align-items:center;justify-content:space-between;width:100%}.brand{display:flex;align-items:center;gap:10px;font-size:23px;font-weight:900;letter-spacing:-1px}.brandmark{width:31px;height:31px;border-radius:10px;background:var(--accent);color:var(--accentText);display:grid;place-items:center;font-weight:1000}.brand span{color:var(--accent)}.smalltag{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:30px;padding:7px 11px}
-.hero{padding:35px 0 26px}.eyebrow{color:var(--accent);font-size:11px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}.hero h1{font-size:clamp(35px,5.5vw,57px);letter-spacing:-2.8px;line-height:1.04;margin:10px 0}.hero p{color:var(--muted);margin:0;max-width:590px;font-size:15px}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:19px;padding:18px;margin-bottom:16px}
-.sports{display:flex;gap:8px;overflow:auto;padding-bottom:3px;scrollbar-width:thin}.sport{white-space:nowrap;border:1px solid var(--line);background:var(--surface2);color:var(--muted);border-radius:11px;padding:10px 13px;font-weight:800;font-size:13px;cursor:pointer}.sport.active{background:var(--accent);border-color:var(--accent);color:var(--accentText)}
-.controls{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0}.day{border:1px solid var(--line);background:var(--surface2);color:var(--muted);padding:10px 15px;border-radius:11px;font-weight:800;cursor:pointer}.day.active{color:var(--accent);border-color:#baf36b65;background:#baf36b12}.search{flex:1;min-width:190px;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px 14px;color:var(--text);outline:none}.search:focus{border-color:#baf36b80}
-.heading{display:flex;justify-content:space-between;align-items:center;margin:23px 0 12px}.heading h2{font-size:20px;letter-spacing:-.6px;margin:0}.count{font-size:12px;color:var(--muted)}
-.list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.match{border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:16px}.meta{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:11px;font-weight:800}.league{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.live{color:var(--accent)}.teams{display:grid;grid-template-columns:1fr 44px 1fr;gap:7px;align-items:center;margin:19px 0}.team{display:flex;align-items:center;gap:9px;min-width:0;font-size:13px;font-weight:800}.team.away{justify-content:flex-end;text-align:right}.logo{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border:1px solid #ffffff12;background:#ffffff06;border-radius:10px;overflow:hidden}.logo img{width:25px;height:25px;object-fit:contain}.teamname{overflow-wrap:anywhere}.score{text-align:center;font-size:17px;font-weight:900;color:var(--accent)}.time{text-align:center;color:var(--muted);font-size:11px;margin-top:4px}.footmeta{border-top:1px solid #ffffff0d;padding-top:10px;color:var(--muted);font-size:11px;display:flex;justify-content:space-between;gap:8px}
-.status{color:var(--muted);font-size:13px;margin:11px 0}.empty{padding:30px 20px;border:1px dashed var(--line);border-radius:15px;text-align:center;color:var(--muted);grid-column:1/-1}.empty strong{display:block;color:var(--text);font-size:16px;margin-bottom:7px}.btn{border:0;background:var(--accent);color:var(--accentText);border-radius:10px;padding:10px 14px;font-weight:900;cursor:pointer}.ai-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}.ai-card p{color:var(--muted);font-size:13px}.ai-result{color:var(--accent);font-weight:800;margin-top:10px}
-footer{border-top:1px solid #ffffff10;margin-top:35px;padding:20px 0;color:var(--muted);font-size:11px}
-@media(max-width:700px){.wrap{padding:0 14px}.list{grid-template-columns:1fr}.hero{padding:28px 0 22px}.hero h1{letter-spacing:-1.8px}.panel{padding:13px}.match{padding:14px}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10131d">
+  <title>EasyBet — Sports fixtures</title>
+  <style>
+    :root{color-scheme:dark;--bg:#10131d;--panel:#191f2d;--panel2:#20283a;--text:#f5f7fb;--muted:#9ba6ba;--accent:#8cf0bd;--line:#30394c}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#1b2940 0,#10131d 55%);color:var(--text);font:16px/1.5 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+    .wrap{width:min(1120px,calc(100% - 32px));margin:auto}.top{padding:28px 0 18px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{font-weight:900;font-size:29px;letter-spacing:-1.3px}.brand span{color:var(--accent)}.tag{color:var(--muted);font-size:13px}
+    .hero{padding:22px 0 24px}.hero h1{font-size:clamp(28px,5vw,44px);line-height:1.08;margin:0 0 8px;letter-spacing:-1.4px}.hero p{margin:0;color:var(--muted)}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}.days{display:flex;gap:8px;flex-wrap:wrap}
+    button,.search{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:12px;padding:11px 15px;font:inherit}
+    button{cursor:pointer;font-weight:700}button.active{background:var(--accent);color:#102019;border-color:var(--accent)}
+    .search{flex:1;min-width:190px;outline:none}.sports{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px;margin:14px 0 22px}
+    .sport{padding:13px 10px;text-align:center;min-height:52px}.sport.active{background:var(--accent);color:#102019;border-color:var(--accent)}
+    .section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:24px 0 12px}.section-head h2{font-size:20px;margin:0}.muted{color:var(--muted);font-size:13px}
+    .matches{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:12px}
+    .match{background:linear-gradient(145deg,var(--panel),#151b28);border:1px solid var(--line);border-radius:17px;padding:16px}
+    .league{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:8px;margin-bottom:14px}
+    .teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}.team{font-weight:750;display:flex;align-items:center;gap:8px;min-width:0}.team:last-child{justify-content:flex-end;text-align:right}
+    .team img{width:27px;height:27px;object-fit:contain}.score{font-weight:900;font-size:20px;white-space:nowrap}.status{margin-top:13px;color:var(--muted);font-size:12px}
+    .empty{padding:26px;border:1px dashed var(--line);border-radius:16px;color:var(--muted);text-align:center;grid-column:1/-1}
+    footer{padding:35px 0 45px;color:var(--muted);font-size:12px}
+    @media(max-width:560px){.top{padding-top:20px}.brand{font-size:25px}.tag{display:none}.wrap{width:min(100% - 22px,1120px)}button{padding:10px 12px}.sports{grid-template-columns:repeat(2,1fr)}}
+  </style>
 </head>
 <body>
-<header><div class="wrap head"><a class="brand"><div class="brandmark">E</div>easy<span>bet</span></a><div class="smalltag">OTTELUKESKUS</div></div></header>
-<div class="wrap">
-<section class="hero"><div class="eyebrow">Yksinkertainen. Selkeä. Nopea.</div><h1>Kaikki ottelut.<br>Yhdessä paikassa.</h1><p>Valitse urheilulaji ja päivä. Näet ottelut selkeästi puhelimella tai tietokoneella.</p></section>
-<section class="panel">
-<div class="sports" id="sports">
-<button class="sport active" data-sport="football">⚽ Jalkapallo</button><button class="sport" data-sport="hockey">🏒 Jääkiekko</button><button class="sport" data-sport="basketball">🏀 Koripallo</button><button class="sport" data-sport="tennis">🎾 Tennis</button><button class="sport" data-sport="american">🏈 Amerikkalainen futis</button><button class="sport" data-sport="baseball">⚾ Baseball</button><button class="sport" data-sport="volleyball">🏐 Lentopallo</button><button class="sport" data-sport="handball">🤾 Käsipallo</button><button class="sport" data-sport="combat">🥊 Nyrkkeily & MMA</button><button class="sport" data-sport="ai">🤖 AI-pelit</button>
-</div>
-<div class="controls"><button class="day active" data-day="0">Tänään</button><button class="day" data-day="1">Huomenna</button><button class="day" data-day="2">Ylihuomenna</button><input class="search" id="search" placeholder="Hae joukkuetta tai sarjaa…"></div>
-<div class="heading"><h2 id="sectionTitle">Jalkapallo</h2><span class="count" id="count"></span></div>
-<div class="status" id="status">Haetaan otteluita…</div><div class="list" id="list"></div>
-</section>
-</div>
-<footer><div class="wrap">EasyBet · Ottelutiedot API-Footballista · Otteluajat Suomen ajassa</div></footer>
+  <div class="wrap">
+    <header class="top"><div class="brand">EASY<span>BET</span></div><div class="tag">Your sports. Your fixtures. One place.</div></header>
+    <section class="hero">
+      <h1>Follow the games.</h1>
+      <p>Browse upcoming fixtures and live football scores.</p>
+    </section>
+    <div class="toolbar">
+      <div class="days" id="days">
+        <button class="active" data-day="0">Today</button><button data-day="1">Tomorrow</button><button data-day="2">In 2 days</button>
+      </div>
+      <input id="search" class="search" type="search" placeholder="Search teams or leagues…" aria-label="Search teams or leagues">
+    </div>
+    <div class="section-head"><h2>Sports</h2><span class="muted">Choose a sport</span></div>
+    <nav class="sports" id="sports">
+      <button class="sport active" data-sport="football">⚽ Football</button>
+      <button class="sport" data-sport="hockey">🏒 Ice hockey</button>
+      <button class="sport" data-sport="basketball">🏀 Basketball</button>
+      <button class="sport" data-sport="tennis">🎾 Tennis</button>
+      <button class="sport" data-sport="american-football">🏈 American football</button>
+      <button class="sport" data-sport="baseball">⚾ Baseball</button>
+      <button class="sport" data-sport="volleyball">🏐 Volleyball</button>
+      <button class="sport" data-sport="handball">🤾 Handball</button>
+      <button class="sport" data-sport="combat-sports">🥊 Combat sports</button>
+    </nav>
+    <div class="section-head"><h2 id="matches-title">Football fixtures</h2><span class="muted" id="date-label"></span></div>
+    <main class="matches" id="matches"><div class="empty">Loading fixtures…</div></main>
+    <footer>EasyBet is a sports fixtures information site. Match data availability depends on the connected data provider.</footer>
+  </div>
 <script>
-const $=s=>document.querySelector(s);let sport='football',day=0,fixtures=[];
-const titles={football:'Jalkapallo',hockey:'Jääkiekko',basketball:'Koripallo',tennis:'Tennis',american:'Amerikkalainen futis',baseball:'Baseball',volleyball:'Lentopallo',handball:'Käsipallo',combat:'Nyrkkeily & MMA',ai:'AI-pelit'};
-const dateStr=n=>{let d=new Date();d.setDate(d.getDate()+n);return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
-const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const localTime=d=>new Date(d).toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/Helsinki'});
-function render(){let q=$('#search').value.toLowerCase();let filtered=fixtures.filter(m=>(m.teams.home.name+' '+m.teams.away.name+' '+m.league.name).toLowerCase().includes(q));$('#count').textContent=filtered.length+' ottelua';$('#list').innerHTML=filtered.length?filtered.map(m=>{let s=m.fixture.status.short,live=['1H','2H','HT','ET','P','LIVE','BT'].includes(s),finished=['FT','AET','PEN'].includes(s);return `<article class="match"><div class="meta"><span class="league">${safe(m.league.name)}${m.league.country?' · '+safe(m.league.country):''}</span><span class="${live?'live':''}">${live?'● LIVE':safe(m.league.round||'')}</span></div><div class="teams"><div class="team"><div class="logo">${m.teams.home.logo?`<img src="${safe(m.teams.home.logo)}" alt="">`:'⚽'}</div><span class="teamname">${safe(m.teams.home.name)}</span></div><div><div class="score">${m.goals.home??'–'} : ${m.goals.away??'–'}</div><div class="time">${live||finished?safe(m.fixture.status.elapsed?m.fixture.status.elapsed+"'":s):safe(localTime(m.fixture.date))}</div></div><div class="team away"><span class="teamname">${safe(m.teams.away.name)}</span><div class="logo">${m.teams.away.logo?`<img src="${safe(m.teams.away.logo)}" alt="">`:'⚽'}</div></div></div><div class="footmeta"><span>${safe(m.fixture.venue?.name||'')}</span><span>${safe(m.fixture.status.long||'')}</span></div></article>`}).join(''):'<div class="empty"><strong>Otteluita ei löytynyt</strong>Vaihda päivää tai kokeile toista hakua.</div>'}
-async function load(){if(sport!=='football'){showNonFootball();return}$('#status').textContent='Haetaan otteluita…';$('#list').innerHTML='';try{let r=await fetch('/.netlify/functions/ottelut?date='+dateStr(day));let data=await r.json();if(!r.ok)throw Error(data.error||'Ottelutietojen haku epäonnistui');fixtures=data;$('#status').textContent='Päivän ottelut';render()}catch(e){$('#status').textContent='';$('#list').innerHTML=`<div class="empty"><strong>Ottelut eivät latautuneet</strong>${safe(e.message)}<br>Tarkista palvelimen API-asetus.</div>`}}
-function showNonFootball(){fixtures=[];$('#status').textContent='';$('#list').innerHTML='';if(sport==='ai'){let pair=[['Nova FC','Pixel United'],['Cyber City','Botcelona'],['Neon Stars','Quantum XI']];$('#list').innerHTML=pair.map((p,i)=>`<article class="ai-card"><div class="meta"><span>AI-OTTELUSIMULAATIO</span><span class="live">FIKTIIVINEN</span></div><h3>${p[0]} — ${p[1]}</h3><p>Tekoälyn luoma simuloitu ottelu. Ei oikea urheilutapahtuma eikä oikeita vedonlyöntikertoimia.</p><button class="btn" data-ai="${i}">Simuloi tulos</button><div class="ai-result" id="ai${i}"></div></article>`).join('');document.querySelectorAll('[data-ai]').forEach(b=>b.onclick=()=>{$('#ai'+b.dataset.ai).textContent='Simuloitu tulos: '+Math.floor(Math.random()*5)+' – '+Math.floor(Math.random()*5);b.textContent='Simuloi uudelleen'});return}
-$('#list').innerHTML=`<div class="empty"><strong>${titles[sport]}</strong>Oikeiden ${titles[sport].toLowerCase()}-otteluiden näyttämiseen liitetään kyseisen lajin otteludata. Emme näytä keksittyjä otteluita.</div>`}
-document.querySelectorAll('[data-sport]').forEach(b=>b.onclick=()=>{sport=b.dataset.sport;document.querySelectorAll('[data-sport]').forEach(x=>x.classList.toggle('active',x===b));$('#sectionTitle').textContent=titles[sport];$('#search').value='';load()});
-document.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>{day=+b.dataset.day;document.querySelectorAll('[data-day]').forEach(x=>x.classList.toggle('active',x===b));load()});
-$('#search').oninput=()=>sport==='football'&&render();load();
+(() => {
+  const state = { day: 0, sport: "football", fixtures: [] };
+  const $ = id => document.getElementById(id);
+  const sportNames = {football:"Football",hockey:"Ice hockey",basketball:"Basketball",tennis:"Tennis","american-football":"American football",baseball:"Baseball",volleyball:"Volleyball",handball:"Handball","combat-sports":"Combat sports"};
+  const dateFor = n => { const d=new Date(); d.setDate(d.getDate()+n); return d; };
+  const dateParam = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+  const prettyDate = d => d.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"});
+  function render(){
+    const query=$("search").value.trim().toLowerCase();
+    $("matches-title").textContent = sportNames[state.sport] + " fixtures";
+    $("date-label").textContent = prettyDate(dateFor(state.day));
+    if(state.sport!=="football"){
+      $("matches").innerHTML='<div class="empty">Fixtures for this sport are not connected yet. Football fixtures are currently available.</div>';
+      return;
+    }
+    const list=state.fixtures.filter(f=>(f.teams.home.name+" "+f.teams.away.name+" "+(f.league?.name||"")).toLowerCase().includes(query));
+    if(!list.length){$("matches").innerHTML='<div class="empty">No fixtures found for this date.</div>';return;}
+    $("matches").innerHTML=list.map(f=>{
+      const home=f.teams.home, away=f.teams.away, status=f.fixture.status.short;
+      const live=["1H","HT","2H","ET","P","LIVE"].includes(status);
+      const score=(f.goals.home===null?"–":f.goals.home)+" : "+(f.goals.away===null?"–":f.goals.away);
+      const time=new Date(f.fixture.date).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+      return `<article class="match"><div class="league"><span>${f.league?.name||"Football"} · ${f.league?.country||""}</span><span>${live?"LIVE":time}</span></div><div class="teams"><div class="team">${home.logo?`<img src="${home.logo}" alt="">`:""}<span>${home.name}</span></div><div class="score">${score}</div><div class="team">${away.name}${away.logo?`<img src="${away.logo}" alt="">`:""}</div></div><div class="status">${f.fixture.status.long||"Scheduled"}${f.fixture.status.elapsed!==null?" · "+f.fixture.status.elapsed+"'":""}</div></article>`;
+    }).join("");
+  }
+  async function load(){
+    $("matches").innerHTML='<div class="empty">Loading fixtures…</div>';
+    const d=dateFor(state.day);
+    $("date-label").textContent=prettyDate(d);
+    if(state.sport!=="football"){render();return;}
+    try{
+      const res=await fetch(`/.netlify/functions/ottelut?date=${dateParam(d)}`);
+      const data=await res.json();
+      if(!res.ok) throw new Error(data.error||"Could not load fixtures");
+      state.fixtures=data.response||[];
+      render();
+    }catch(e){$("matches").innerHTML=`<div class="empty">${e.message}. Please check the API connection and try again.</div>`;}
+  }
+  $("days").addEventListener("click",e=>{const b=e.target.closest("button[data-day]");if(!b)return;state.day=Number(b.dataset.day);document.querySelectorAll("#days button").forEach(x=>x.classList.toggle("active",x===b));load();});
+  $("sports").addEventListener("click",e=>{const b=e.target.closest("button[data-sport]");if(!b)return;state.sport=b.dataset.sport;document.querySelectorAll(".sport").forEach(x=>x.classList.toggle("active",x===b));load();});
+  $("search").addEventListener("input",render);
+  load();
+})();
 </script>
-</body></html>
+</body>
+</html>
