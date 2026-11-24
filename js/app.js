@@ -365,12 +365,13 @@
     return `<div class="card inj-col"><h4>${logo(t.logo, t.name)}<span>${esc(t.name)}</span></h4>${inner}</div>`;
   }
 
+  let statFailed = false;
   function statCard(title, sub, h, a, rows, wide) {
     const body = rows.filter((r) => r[1] != null || r[2] != null);
     const inner = body.length
       ? `<div class="stat-head"><span>${esc(h.name)}</span><span></span><span>${esc(a.name)}</span></div>
          ${body.map((r) => `<div class="stat-row"><b>${r[1] == null ? '–' : esc(r[1])}</b><span>${esc(r[0])}</span><b>${r[2] == null ? '–' : esc(r[2])}</b></div>`).join('')}`
-      : noData();
+      : noData(statFailed ? 'Temporarily unavailable: the data provider did not return recent matches.' : undefined);
     return `<section class="card stat-card ${wide ? 'wide' : ''}"><h3>${esc(title)}</h3><p class="sub">${esc(sub)}</p>${inner}</section>`;
   }
 
@@ -414,6 +415,7 @@
 
   function standingsHtml(d, f) {
     const s = d.standings;
+    if (d.unavailable && d.unavailable.includes('standings')) return noData('Temporarily unavailable: the data provider did not return the league table.');
     if (!s || !s.rows || !s.rows.length) return noData('No league table is available for this competition.');
     const ids = new Set([f.teams.home.id, f.teams.away.id]);
     return `<div class="table-wrap"><table class="st"><thead><tr><th>#</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr></thead><tbody>
@@ -425,7 +427,10 @@
     const h = f.teams.home;
     const a = f.teams.away;
     const unavailable = new Set(d.unavailable || []);
-    const lastNote = unavailable.has('homeLast') || unavailable.has('awayLast') ? '<p class="form-note">Some recent results are temporarily unavailable.</p>' : '';
+    statFailed = unavailable.has('homeLast') || unavailable.has('awayLast');
+    const err = d.errors || {};
+    const lastNote = unavailable.has('homeLast') || unavailable.has('awayLast')
+      ? `<p class="form-note">Recent results could not be loaded from the data provider${err.homeLast || err.awayLast ? ': ' + esc(err.homeLast || err.awayLast) : '.'}</p>` : '';
 
     $('#match-body').innerHTML = `
       ${heroHtml(f)}

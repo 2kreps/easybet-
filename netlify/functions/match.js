@@ -37,12 +37,25 @@ async function get(path, params = {}, retry = true) {
   return j.response || [];
 }
 
-async function lastMatches(team) {
-  try {
-    return await get('/fixtures', { team, last: 20 });
-  } catch (e) {
-    return get('/fixtures', { team, last: 10 });
+// Recent matches: try `last`, then fall back to the team's season fixtures
+// (some API plans reject the `last` parameter).
+async function lastMatches(team, season) {
+  const attempts = [
+    () => get('/fixtures', { team, last: 20 }),
+    () => get('/fixtures', { team, last: 10 }),
+    () => get('/fixtures', { team, season }),
+  ];
+  let lastErr;
+  for (const attempt of attempts) {
+    try {
+      const r = await attempt();
+      if (r.length) return r;
+    } catch (e) {
+      lastErr = e;
+    }
   }
+  if (lastErr) throw lastErr;
+  return [];
 }
 
 async function mapLimit(items, limit, fn) {
@@ -120,15 +133,17 @@ async function detailPart(q) {
 
   const prematch = PREMATCH.has(status);
   const failed = [];
+  const errors = {};
   const run = (name, promise) =>
-    promise.catch(() => {
+    promise.catch((e) => {
       failed.push(name);
+      errors[name] = String((e && e.message) || e).slice(0, 200);
       return null;
     });
 
   const [homeLast, awayLast, injuries, standings, predictions, odds] = await Promise.all([
-    run('homeLast', lastMatches(home)),
-    run('awayLast', lastMatches(away)),
+    run('homeLast', lastMatches(home, season)),
+    run('awayLast', lastMatches(away, season)),
     run('injuries', get('/injuries', { fixture: q.id })),
     run('standings', get('/standings', { league, season })),
     prematch ? run('predictions', get('/predictions', { fixture: q.id })) : null,
@@ -150,7 +165,7 @@ async function detailPart(q) {
     failed,
   });
 
-  return reply(200, { fixture, ...report }, prematch ? 600 : 120);
+  return reply(200, { fixture, ...report, errors }, failed.length ? 0 : prematch ? 600 : 120);
 }
 
 exports.handler = async (event) => {

@@ -546,11 +546,18 @@ function buildTips({ H, A, odds, predictions, hs, as }) {
     tips: picked.map((c, i) => {
       const [market, selection] = describe(c.sel, H, A);
       const probability = Math.floor(c.p);
-      const explanation =
-        explain(c.sel, ctx) ||
-        (c.source === 'odds'
-          ? `Bookmaker odds imply a ${probability}% chance once the margin is removed.`
-          : `The data provider estimates a ${probability}% chance.`);
+      let explanation = explain(c.sel, ctx);
+      if (!explanation) {
+        const fair = (100 / c.p).toFixed(2);
+        explanation =
+          c.source === 'odds'
+            ? `${selection}: bookmakers price this at about ${fair} on average, which is ${probability}% once their margin is removed.`
+            : `${selection}: the data provider estimates a ${probability}% chance.`;
+        const pc = predictions?.[0]?.predictions?.percent;
+        if (pc && c.sel.kind.startsWith('r_') && c.source === 'odds') {
+          explanation += ` The provider's own model gives ${H} ${pc.home}, draw ${pc.draw}, ${A} ${pc.away}.`;
+        }
+      }
       return {
         rank: i + 1,
         kind: c.sel.kind,
