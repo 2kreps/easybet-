@@ -1,75 +1,63 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>EASYBET — Match Centre</title>
-<style>
-:root{--bg:#080d18;--panel:#101a2b;--panel2:#142137;--line:#24334b;--muted:#91a0b7;--text:#f4f7fc;--green:#a8f06b;--red:#ff647c}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1b3151 0,transparent 48%),var(--bg);color:var(--text);font:15px/1.5 Inter,system-ui,-apple-system,Segoe UI,sans-serif}
-.shell{max-width:1180px;margin:auto;padding:26px 22px 40px}.top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:20px}
-.brand{display:flex;align-items:center;gap:12px;font-size:24px;font-weight:900;letter-spacing:2px}.mark{width:38px;height:38px;border-radius:12px;background:var(--green);color:#10200c;display:grid;place-items:center;font-weight:1000}
-.muted{color:var(--muted)}.eyebrow{color:var(--green);text-transform:uppercase;letter-spacing:2px;font-size:11px;font-weight:800;margin:28px 0 8px}
-h1{font-size:clamp(30px,5vw,44px);line-height:1.05;margin:0}.sub{color:var(--muted);margin:10px 0 24px}
-.tabs{display:flex;gap:8px;padding:7px;background:#0e1726;border:1px solid var(--line);border-radius:14px;width:max-content;margin-bottom:20px}
-button{font:inherit;cursor:pointer}.tab,.filter{border:0;background:transparent;color:var(--muted);font-weight:800;padding:10px 20px;border-radius:9px}.tab.active{background:var(--green);color:#10200c}
-.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}.filter{border:1px solid var(--line);background:var(--panel);padding:8px 13px;font-size:12px}.filter.active{border-color:var(--green);color:var(--green)}
-.content{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:16px}.card{background:linear-gradient(145deg,#121e31,#0f1929);border:1px solid var(--line);border-radius:17px;overflow:hidden}.head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}.match{display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid var(--line);cursor:pointer;transition:.15s}.match:hover{background:#1b2a40}.teams{flex:1;min-width:0}.league{font-size:11px;color:var(--muted);margin-bottom:6px}.team{display:flex;align-items:center;gap:8px;font-weight:750;font-size:14px;margin:4px 0}.team img{width:23px;height:23px;object-fit:contain}.score{font-size:18px;font-weight:900;white-space:nowrap}.kick{text-align:right;min-width:72px;font-size:12px;color:var(--muted)}.status{color:var(--green);font-weight:850;font-size:10px;text-transform:uppercase}
-.side{padding:19px}.side h3{margin:0 0 10px}.side p{font-size:13px;color:var(--muted)}.feature{padding:12px 0;border-top:1px solid var(--line);font-size:13px}
-.empty,.loading{padding:42px 20px;text-align:center;color:var(--muted)}.footer{display:flex;justify-content:space-between;margin-top:22px;color:#718099;font-size:11px;letter-spacing:1.3px}
-.modal{position:fixed;inset:0;background:#030712d9;display:none;align-items:flex-start;justify-content:center;padding:22px;overflow:auto;z-index:10}.modal.open{display:flex}.dialog{width:min(900px,100%);background:#0e1828;border:1px solid #30415b;border-radius:20px;overflow:hidden;margin:auto}.dialoghead{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.close{background:#1b2a40;border:1px solid var(--line);color:white;border-radius:10px;padding:7px 12px}.matchhero{padding:24px 20px;background:#142137}.versus{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;text-align:center;gap:12px}.club img{width:58px;height:58px;object-fit:contain}.club strong{display:block;margin-top:8px}.vs{font-size:23px;font-weight:900}.kickline{margin-top:16px;text-align:center;color:#c4cfdd;font-size:13px}
-.section{padding:18px 20px;border-top:1px solid var(--line)}.section h3{margin:0 0 13px;font-size:16px}.tips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.tip{background:#17253a;border:1px solid #2b3d56;border-radius:13px;padding:14px}.tipname{font-size:12px;font-weight:850;letter-spacing:.4px}.pct{font-size:26px;font-weight:900;color:var(--green);margin:7px 0}.bar{height:6px;border-radius:10px;background:#34445a;overflow:hidden}.bar i{display:block;height:100%;background:var(--green)}.reason{font-size:12px;color:#c1ccda;margin-top:10px}.fine{font-size:11px;color:var(--muted);margin-top:7px}
-.statbuttons{display:flex;flex-wrap:wrap;gap:8px}.statbtn{border:1px solid var(--line);background:#17253a;color:#d8e2ef;border-radius:9px;padding:9px 12px;font-size:12px}.statbtn.active{border-color:var(--green);color:var(--green)}.statpanel{margin-top:13px;padding:14px;background:#142137;border-radius:12px;min-height:70px;font-size:13px;color:#d2dce9}.statpanel table{width:100%;border-collapse:collapse}.statpanel td,.statpanel th{text-align:left;padding:7px;border-bottom:1px solid #30415b}.statpanel th{color:#9eafc4;font-size:11px}.statpanel .muted{font-size:12px}
-@media(max-width:760px){.shell{padding:18px 13px}.content{grid-template-columns:1fr}.tabs{width:100%;display:grid;grid-template-columns:repeat(3,1fr)}.tab{padding:10px 5px}.side{display:none}.match{padding:14px 12px;gap:8px}.kick{min-width:58px}.tips{grid-template-columns:1fr}.versus{gap:4px}.club img{width:44px;height:44px}.modal{padding:8px}.dialoghead,.section{padding:15px}.matchhero{padding:18px 10px}}
-</style>
+<meta name="description" content="EASYBET Match Centre: live football scores, local kick-off times and data-backed betting tips.">
+<meta name="theme-color" content="#050605">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2339ff7a'/%3E%3Cpath d='M20 16h26v8H29v7h14v8H29v9h17v8H20z' fill='%23041008'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
 </head>
-<body><div class="shell">
-<header class="top"><div class="brand"><div class="mark">E</div>EASYBET</div><div class="muted">YOUR DAILY FOOTBALL MATCH CENTRE</div></header>
-<div class="eyebrow">THE GAME STARTS HERE</div><h1>Match centre</h1><p class="sub">Major fixtures, local kick-off times and data-backed match insights.</p><div class="muted" id="date" style="margin:0 0 18px;font-size:12px"></div>
-<nav class="tabs"><button class="tab" data-tab="live">● Live</button><button class="tab active" data-tab="today">Today</button><button class="tab" data-tab="tomorrow">Tomorrow</button></nav>
-<div class="filters"><button class="filter active">⚽ Football</button></div>
-<div class="content"><section class="card"><div class="head"><strong id="heading">Today’s fixtures</strong><span class="muted" id="count">Loading…</span></div><div id="matches" class="loading">Loading football fixtures…</div></section>
-<aside class="card side"><h3>Match insights</h3><p>Choose a match to open its full match centre.</p><div class="feature">● Live scores and match status</div><div class="feature">▦ Local kick-off times</div><div class="feature">✧ Three best-supported tips</div><div class="feature">⚑ Detailed match statistics</div></aside></div>
-<footer class="footer"><span>BUILT FOR THE LOVE OF THE GAME</span><strong>MADE BY R4JU</strong></footer>
-</div>
-<div class="modal" id="modal"><div class="dialog"><div class="dialoghead"><strong>Match centre</strong><button class="close" id="close">Close ✕</button></div><div id="detail"><div class="loading">Loading match details…</div></div></div></div>
-<script>
-const $=id=>document.getElementById(id);
-let tab='today', fixtures=[];
-const labels={live:'Live matches',today:"Today's fixtures",tomorrow:"Tomorrow's fixtures"};
-function dateKey(n=0){let d=new Date();d.setDate(d.getDate()+n);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
-function localDate(v){return new Date(v).toLocaleString(undefined,{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit',timeZoneName:'short'})}
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-async function api(q){let r=await fetch('/.netlify/functions/ottelut?'+new URLSearchParams(q));let d=await r.json();if(!r.ok)throw Error(d.message||'API error');return d}
-async function load(){ $('heading').textContent=labels[tab];$('count').textContent='…';$('matches').className='loading';$('matches').textContent='Loading football fixtures…';
- try{let d=await api(tab==='live'?{live:'all'}:{date:dateKey(tab==='today'?0:1)});fixtures=d.response||[];$('count').textContent=fixtures.length+' matches';
- if(!fixtures.length){$('matches').className='empty';$('matches').textContent='No fixtures available for this date.';return}
- $('matches').className='';$('matches').innerHTML=fixtures.map((f,i)=>{let h=f.teams?.home||{},a=f.teams?.away||{},s=f.fixture?.status||{},live=s.short==='1H'||s.short==='2H'||s.short==='HT'||s.short==='ET'||s.short==='P';return `<article class="match" data-index="${i}"><div class="teams"><div class="league">${esc(f.league?.name)} · ${esc(f.league?.country)}</div><div class="team"><img src="${esc(h.logo)}" alt=""><span>${esc(h.name)}</span></div><div class="team"><img src="${esc(a.logo)}" alt=""><span>${esc(a.name)}</span></div></div><div class="score">${live?`${f.goals?.home??0} : ${f.goals?.away??0}`:'VS'}</div><div class="kick">${live?`<span class="status">LIVE ${s.elapsed??''}'</span>`:esc(new Date(f.fixture.date).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}))}<div>${live?'':esc(new Date(f.fixture.date).toLocaleDateString())}</div></div></article>`}).join('');
- document.querySelectorAll('.match').forEach(el=>el.addEventListener('click',()=>openMatch(fixtures[Number(el.dataset.index)])));
- }catch(e){$('count').textContent='—';$('matches').className='empty';$('matches').textContent='Fixtures unavailable: '+e.message}
-}
-function tableRows(rows){if(!rows?.length)return '<p class="muted">No data available from the provider for this match.</p>';return `<table><tbody>${rows.map(r=>`<tr><th>${esc(r.label)}</th><td>${esc(r.home)}</td><td>${esc(r.away)}</td></tr>`).join('')}</tbody></table>`}
-function tipsHtml(d){
- const p=d.predictions?.predictions; const stats=d.stats||{};
- const home=d.fixture?.teams?.home?.name||'Home', away=d.fixture?.teams?.away?.name||'Away';
- const tips=[];
- if(p?.winner?.name && p?.percent){let pct=parseInt(String(p.percent.home||'0').replace('%',''))||0;let who=p.winner.name;tips.push({name:'FOOTBALL WINNER',pick:who,percent:pct,why:p.advice||`Provider prediction favours ${who}.`,basis:'API-Football match prediction'});}
- if(p?.under_over){let over=String(p.under_over).trim();let pct=Number(p.percent?.home?.replace?.('%',''))||0;tips.push({name:'OVER / UNDER GOALS',pick:`Goals market: ${over}`,percent:pct||null,why:`Provider goal forecast: ${over}. Check the recent goals data below before betting.`,basis:'API-Football prediction'});}
- const corner=stats.corners;
- if(corner?.homeAvg!=null&&corner?.awayAvg!=null){let avg=corner.homeAvg+corner.awayAvg;let pct=corner.hitRate;tips.push({name:'CORNERS / HANDICAP',pick:avg>=8.5?'Over 8.5 corners':'Corner line requires review',percent:pct,why:`Recent sample averages: ${home} ${corner.homeAvg.toFixed(1)}, ${away} ${corner.awayAvg.toFixed(1)}; combined ${avg.toFixed(1)} corners.`,basis:`${corner.sample||0} recent matches per team`});}
- if(stats.btts?.hitRate!=null)tips.push({name:'BOTH TEAMS TO SCORE',pick:'Both teams to score',percent:stats.btts.hitRate,why:stats.btts.reason,basis:stats.btts.sample+' recent matches'});
- if(stats.halfTime?.label)tips.push({name:'HALF-TIME RESULT',pick:stats.halfTime.label,percent:stats.halfTime.percent,why:stats.halfTime.reason,basis:stats.halfTime.sample+' recent matches'});
- return tips.filter(t=>t.percent!==null&&t.percent!==undefined&&t.percent>0).sort((a,b)=>b.percent-a.percent).slice(0,3).map(t=>`<div class="tip"><div class="tipname">${esc(t.name)}</div><div><strong>${esc(t.pick)}</strong></div><div class="pct">${t.percent}%</div><div class="bar"><i style="width:${Math.min(100,Math.max(0,t.percent))}%"></i></div><div class="reason">${esc(t.why)}</div><div class="fine">${esc(t.basis)} · Historical/model estimate, not a guarantee</div></div>`).join('')||'<p class="muted">There are not enough verified prediction/statistics data to publish three responsible tips for this match. No percentages have been invented.</p>';
-}
-async function openMatch(f){$('modal').classList.add('open');$('detail').innerHTML='<div class="loading">Loading match details and available statistics…</div>';
- try{let d=await api({fixture:f.fixture.id,home:f.teams.home.id,away:f.teams.away.id,league:f.league.id,season:f.league.season});let h=f.teams.home,a=f.teams.away,s=f.fixture.status;
- $('detail').innerHTML=`<div class="matchhero"><div class="versus"><div class="club"><img src="${esc(h.logo)}"><strong>${esc(h.name)}</strong></div><div class="vs">${s.short==='NS'?'VS':`${f.goals?.home??0} : ${f.goals?.away??0}`}</div><div class="club"><img src="${esc(a.logo)}"><strong>${esc(a.name)}</strong></div></div><div class="kickline">${esc(f.league.name)} · ${esc(localDate(f.fixture.date))} · ${esc(s.long)}</div></div>
- <div class="section"><h3>TOP 3 DATA-BACKED TIPS</h3><div class="tips">${tipsHtml(d)}</div></div>
- <div class="section"><h3>MATCH STATISTICS</h3><div class="statbuttons">${['Last 5 Matches','Head-to-head','Goals scored & conceded','Corners statistics','Home / Away form','League standings','Injuries & suspensions','Half-time statistics'].map((x,i)=>`<button class="statbtn ${i===0?'active':''}" data-stat="${i}">${x}</button>`).join('')}</div><div class="statpanel" id="statpanel">${statContent(d,0)}</div></div>`;
- document.querySelectorAll('.statbtn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.statbtn').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('statpanel').innerHTML=statContent(d,Number(b.dataset.stat))}));
- }catch(e){$('detail').innerHTML=`<div class="section">Match details could not be loaded: ${esc(e.message)}</div>`}
-}
-function statContent(d,n){const names=['Last 5 Matches','Head-to-head','Goals scored & conceded','Corners statistics','Home / Away form','League standings','Injuries & suspensions','Half-time statistics'];let x=d.sections?.[n];if(!x||!x.rows?.length)return `<strong>${names[n]}</strong><p class="muted">This information is not available from the data provider for this match.</p>`;return `<strong>${names[n]}</strong>${tableRows(x.rows)}${x.note?`<p class="muted">${esc(x.note)}</p>`:''}`}
-$('close').onclick=()=>$('modal').classList.remove('open');$('modal').addEventListener('click',e=>{if(e.target===$('modal'))$('modal').classList.remove('open')});
-document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');tab=b.dataset.tab;load()}));
-$('date').textContent=new Date().toLocaleDateString();load();
-</script></body></html>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="./" aria-label="EASYBET home">
+      <span class="brand-mark" aria-hidden="true">E</span>
+      <span class="brand-word">EASY<b>BET</b></span>
+    </a>
+    <nav class="tabs" id="tabs" aria-label="Match day">
+      <button class="tab" type="button" data-tab="live"><span class="live-dot" aria-hidden="true"></span>Live</button>
+      <button class="tab is-active" type="button" data-tab="today">Today</button>
+      <button class="tab" type="button" data-tab="tomorrow">Tomorrow</button>
+    </nav>
+    <div class="tz" id="tz" title="Kick-off times are shown in your local timezone"></div>
+  </div>
+</header>
+
+<!-- ======================= MATCH LIST ======================= -->
+<main id="view-list" class="page">
+  <section class="intro">
+    <p class="eyebrow">THE GAME STARTS HERE</p>
+    <h1 id="list-title">Today’s matches</h1>
+    <p class="intro-sub">Major fixtures, local kick-off times and betting tips backed by real data.</p>
+  </section>
+
+  <div class="sports" id="sports" role="tablist" aria-label="Sports"></div>
+  <p class="sport-note" id="sport-note" role="status" aria-live="polite" hidden></p>
+
+  <div class="list-head">
+    <strong id="list-heading">Football</strong>
+    <span class="muted" id="list-count"></span>
+  </div>
+  <div id="matches" aria-live="polite"></div>
+</main>
+
+<!-- ======================= MATCH CENTRE (full screen) ======================= -->
+<main id="view-match" class="page" hidden>
+  <div class="mc-bar">
+    <button class="back" id="back" type="button"><span aria-hidden="true">←</span> Back</button>
+    <span class="mc-bar-title">MATCH CENTRE</span>
+  </div>
+  <div id="match-body"></div>
+</main>
+
+<footer class="footer">
+  <span>BUILT FOR THE LOVE OF THE GAME</span>
+  <strong>MADE BY R4JU</strong>
+</footer>
+
+<script src="js/app.js" defer></script>
+</body>
+</html>
