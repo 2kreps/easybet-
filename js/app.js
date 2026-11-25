@@ -331,7 +331,7 @@
     }
     return `<div class="tips">${d.tips.map((t) => `
       <article class="tip" data-kind="${esc(t.kind)}">
-        <div class="tip-top"><span>${esc(t.market)}</span><span class="tip-rank">FAIR ${Number(t.fairOdds || 0).toFixed(3)}x</span></div>
+        <div class="tip-top"><span>${esc(t.market)}</span><span class="tip-rank">ODDS ${Number(t.offeredOdds || 0).toFixed(2)}x</span></div>
         <div class="tip-main">
           <div class="tip-sel">${esc(t.selection)}</div>
           <div class="pct" style="${probStyle(t.probability)}"><span>${t.probability}</span><small>%</small></div>

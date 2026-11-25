@@ -251,6 +251,31 @@ function handicapPairs(bet) {
   return out;
 }
 
+function offeredOddsFor(oddsResp, sel) {
+  const books = Array.isArray(oddsResp?.[0]?.bookmakers) ? oddsResp[0].bookmakers : [];
+  const out = [];
+  const target = (sel.kind === 'r_home' ? ['match winner', 'home'] :
+    sel.kind === 'r_away' ? ['match winner', 'away'] :
+    sel.kind === 'ht_home' ? ['first half winner', 'home'] :
+    sel.kind === 'ht_away' ? ['first half winner', 'away'] :
+    sel.kind === 'btts_yes' ? ['both teams score', 'yes'] :
+    sel.kind === 'btts_no' ? ['both teams score', 'no'] :
+    sel.kind === 'over' ? ['goals over/under', `over ${sel.line}`] :
+    sel.kind === 'under' ? ['goals over/under', `under ${sel.line}`] :
+    sel.kind === 'c_over' ? ['corners over under', `over ${sel.line}`] :
+    sel.kind === 'c_under' ? ['corners over under', `under ${sel.line}`] :
+    null);
+  if (!target) return null; // no directly offered bookmaker price for this selection
+  for (const bm of books) {
+    const bet = (bm?.bets || []).find(b => String(b?.name || '').trim().toLowerCase() === target[0]);
+    if (!bet) continue;
+    const v = (bet.values || []).find(x => String(x?.value || '').trim().toLowerCase() === target[1]);
+    const odd = Number(v?.odd);
+    if (Number.isFinite(odd) && odd > 1) out.push(odd);
+  }
+  return out.length >= MIN_BOOKMAKERS ? median(out) : null;
+}
+
 function oddsCandidates(oddsResp) {
   const bookmakers = Array.isArray(oddsResp?.[0]?.bookmakers) ? oddsResp[0].bookmakers : [];
   const acc = { r: {}, h: {}, goals: {}, btts: { yes: [], no: [] }, ah: {}, corners: {} };
@@ -534,9 +559,10 @@ function buildTips({ H, A, odds, predictions, hs, as }) {
 
   const best = new Map();
   for (const c of cands) {
-    if (!(c.p >= THRESHOLD)) continue; // strict 65 % rule on the unrounded value
-    // Do not filter by fair odds here: fair odds are not the bookmaker's offered odds.
-    // This filter previously suppressed almost every 65%+ candidate.
+    if (!(c.p >= THRESHOLD)) continue;
+    // Publish only a directly quoted bookmaker price, not synthetic fair odds.
+    c.offeredOdds = c.source === 'odds' ? offeredOddsFor(odds, c.sel) : null;
+    if (!(Number(c.offeredOdds) > 1.80)) continue;
     const cur = best.get(c.family);
     if (!cur || c.p > cur.p) best.set(c.family, c);
   }
@@ -553,7 +579,7 @@ function buildTips({ H, A, odds, predictions, hs, as }) {
         const fair = (100 / c.p).toFixed(2);
         explanation =
           c.source === 'odds'
-            ? `${selection}: bookmakers price this at about ${fair} on average, which is ${probability}% once their margin is removed.`
+            ? `${selection}: estimated probability ${probability}%; bookmaker's quoted odds ${Number(c.offeredOdds).toFixed(2)}.`
             : `${selection}: the data provider estimates a ${probability}% chance.`;
         const pc = predictions?.[0]?.predictions?.percent;
         if (pc && c.sel.kind.startsWith('r_') && c.source === 'odds') {
@@ -567,6 +593,7 @@ function buildTips({ H, A, odds, predictions, hs, as }) {
         selection,
         probability,
         fairOdds: Math.round((100 / c.p) * 1000) / 1000,
+        offeredOdds: Math.round(c.offeredOdds * 100) / 100,
         source: c.source,
         basis: basisText(c),
         explanation,
