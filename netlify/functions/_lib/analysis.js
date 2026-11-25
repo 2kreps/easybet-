@@ -535,6 +535,9 @@ function buildTips({ H, A, odds, predictions, hs, as }) {
   const best = new Map();
   for (const c of cands) {
     if (!(c.p >= THRESHOLD)) continue; // strict 65 % rule on the unrounded value
+    // Hide very short fair prices: 1.50 or lower is not a value tip.
+    // c.p is the no-margin probability, so its fair decimal price is 100 / c.p.
+    if (c.p >= (100 / 1.5)) continue;
     const cur = best.get(c.family);
     if (!cur || c.p > cur.p) best.set(c.family, c);
   }
@@ -564,6 +567,7 @@ function buildTips({ H, A, odds, predictions, hs, as }) {
         market,
         selection,
         probability,
+        fairOdds: Math.round((100 / c.p) * 1000) / 1000,
         source: c.source,
         basis: basisText(c),
         explanation,

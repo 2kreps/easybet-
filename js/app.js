@@ -324,14 +324,14 @@
       return noData('Betting tips are based on pre-match data, so they are only shown before kick-off.');
     }
     if (d.tipsStatus === 'unavailable') {
-      return noData('Tip data is temporarily unavailable from the data provider. Please try again later.');
+      return '';
     }
     if (!d.tips || !d.tips.length) {
-      return noData('No betting tip reaches the 65% verified-probability threshold for this match, so none are shown.');
+      return '';
     }
     return `<div class="tips">${d.tips.map((t) => `
       <article class="tip" data-kind="${esc(t.kind)}">
-        <div class="tip-top"><span>${esc(t.market)}</span><span class="tip-rank">#${t.rank}</span></div>
+        <div class="tip-top"><span>${esc(t.market)}</span><span class="tip-rank">FAIR ${Number(t.fairOdds || 0).toFixed(3)}x</span></div>
         <div class="tip-main">
           <div class="tip-sel">${esc(t.selection)}</div>
           <div class="pct" style="${probStyle(t.probability)}"><span>${t.probability}</span><small>%</small></div>
@@ -368,6 +368,7 @@
   let statFailed = false;
   function statCard(title, sub, h, a, rows, wide) {
     const body = rows.filter((r) => r[1] != null || r[2] != null);
+    if (!body.length) return '';
     const inner = body.length
       ? `<div class="stat-head"><span>${esc(h.name)}</span><span></span><span>${esc(a.name)}</span></div>
          ${body.map((r) => `<div class="stat-row"><b>${r[1] == null ? '–' : esc(r[1])}</b><span>${esc(r[0])}</span><b>${r[2] == null ? '–' : esc(r[2])}</b></div>`).join('')}`
@@ -415,7 +416,7 @@
 
   function standingsHtml(d, f) {
     const s = d.standings;
-    if (d.unavailable && d.unavailable.includes('standings')) return noData('Temporarily unavailable: the data provider did not return the league table.');
+    if (d.unavailable && d.unavailable.includes('standings')) return noData('');
     if (!s || !s.rows || !s.rows.length) return noData('No league table is available for this competition.');
     const ids = new Set([f.teams.home.id, f.teams.away.id]);
     return `<div class="table-wrap"><table class="st"><thead><tr><th>#</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr></thead><tbody>
@@ -428,45 +429,53 @@
     const a = f.teams.away;
     const unavailable = new Set(d.unavailable || []);
     statFailed = unavailable.has('homeLast') || unavailable.has('awayLast');
-    const err = d.errors || {};
-    const lastNote = unavailable.has('homeLast') || unavailable.has('awayLast')
-      ? `<p class="form-note">Recent results could not be loaded from the data provider${err.homeLast || err.awayLast ? ': ' + esc(err.homeLast || err.awayLast) : '.'}</p>` : '';
+    const recentHome = d.recent && d.recent.home || [];
+    const recentAway = d.recent && d.recent.away || [];
+    const hasRecent = recentHome.length || recentAway.length;
+    const hasInjuries = d.injuries && d.injuries.available;
 
     $('#match-body').innerHTML = `
       ${heroHtml(f)}
 
-      <section class="section">
-        <h2 class="sec-title">TOP 3 BETTING TIPS</h2>
+      ${d.tips && d.tips.length ? `<section class="section">
+        <h2 class="sec-title">TOP BETTING TIPS · FAIR ODDS OVER 1.50</h2>
         ${tipsHtml(d)}
-      </section>
+      </section>` : ''}
 
-      <section class="section">
+      ${hasRecent ? `<section class="section">
         <h2 class="sec-title">Last 5 Matches</h2>
         <div class="cards-2">
-          <div class="card">${teamHead(h)}${formHtml(d.recent.home, h.name)}</div>
-          <div class="card">${teamHead(a)}${formHtml(d.recent.away, a.name)}</div>
+          ${recentHome.length ? `<div class="card">${teamHead(h)}${formHtml(recentHome, h.name)}</div>` : ''}
+          ${recentAway.length ? `<div class="card">${teamHead(a)}${formHtml(recentAway, a.name)}</div>` : ''}
         </div>
-        <p class="form-note">W = win · D = draw · L = loss. Oldest on the left, most recent on the right. Hover or tap a result for details.</p>${lastNote}
-      </section>
+        <p class="form-note">W = win · D = draw · L = loss.</p>
+      </section>` : ''}
 
-      <section class="section">
+      ${hasInjuries ? `<section class="section">
         <h2 class="sec-title">Injuries &amp; Suspensions</h2>
         <div class="cards-2">
-          ${injuryCol(h, d.injuries.home, d.injuries.available)}
-          ${injuryCol(a, d.injuries.away, d.injuries.available)}
+          ${injuryCol(h, d.injuries.home, true)}
+          ${injuryCol(a, d.injuries.away, true)}
         </div>
-      </section>
+      </section>` : ''}
 
-      <section class="section">
+      <section class="section" id="team-stats-section">
         <h2 class="sec-title">Team Statistics</h2>
         <div class="stats-grid">
           ${goalsCard(d, h, a)}
           <section class="card stat-card" id="corners-card"><h3>Corners Statistics</h3><p class="sub">Last 5 matches</p><div id="corners-body"><div class="skeleton" style="height:120px;margin:0"></div></div></section>
           ${venueCard(d, h, a)}
           ${halfTimeCard(d, h, a)}
-          <section class="card stat-card wide"><h3>League Standings</h3><p class="sub">${esc(f.league.name)} · ${esc(f.league.season)}</p>${standingsHtml(d, f)}</section>
+          ${d.standings && d.standings.rows && d.standings.rows.length ? `<section class="card stat-card wide"><h3>League Standings</h3><p class="sub">${esc(f.league.name)} · ${esc(f.league.season)}</p>${standingsHtml(d, f)}</section>` : ''}
         </div>
       </section>`;
+    const statsSection = $('#team-stats-section');
+    if (statsSection && !statsSection.querySelector('.stat-card')) statsSection.remove();
+  }
+
+  function cleanupStatsSection() {
+    const section = $('#team-stats-section');
+    if (section && !section.querySelector('.stat-card')) section.remove();
   }
 
   async function loadCorners(token, f, d) {
@@ -474,7 +483,7 @@
     if (!slot) return;
     const hIds = (d.corners && d.corners.home) || [];
     const aIds = (d.corners && d.corners.away) || [];
-    if (!hIds.length && !aIds.length) { slot.innerHTML = noData(); return; }
+    if (!hIds.length && !aIds.length) { $('#corners-card')?.remove(); cleanupStatsSection(); return; }
     try {
       const c = await api('match', { part: 'corners', home: f.teams.home.id, away: f.teams.away.id, h: hIds.join(','), a: aIds.join(',') });
       if (token !== state.matchToken) return;
@@ -486,10 +495,13 @@
         ['Total corners per match', x && x.avgTotal, y && y.avgTotal],
         ['Matches with data', x && x.n, y && y.n],
       ].filter((r) => r[1] != null || r[2] != null);
-      slot.innerHTML = rows.length
-        ? `<div class="stat-head"><span>${esc(f.teams.home.name)}</span><span></span><span>${esc(f.teams.away.name)}</span></div>
-           ${rows.map((r) => `<div class="stat-row"><b>${r[1] == null ? '–' : esc(r[1])}</b><span>${esc(r[0])}</span><b>${r[2] == null ? '–' : esc(r[2])}</b></div>`).join('')}`
-        : noData('Corner statistics are not available for these teams’ recent matches.');
+      if (!rows.length) {
+        $('#corners-card')?.remove();
+        cleanupStatsSection();
+        return;
+      }
+      slot.innerHTML = `<div class="stat-head"><span>${esc(f.teams.home.name)}</span><span></span><span>${esc(f.teams.away.name)}</span></div>
+           ${rows.map((r) => `<div class="stat-row"><b>${r[1] == null ? '–' : esc(r[1])}</b><span>${esc(r[0])}</span><b>${r[2] == null ? '–' : esc(r[2])}</b></div>`).join('')}`;
 
       // Add real corner averages to a corners tip, if one is shown
       document.querySelectorAll('.tip[data-kind^="c_"]').forEach((tip) => {
@@ -501,7 +513,7 @@
         }
       });
     } catch (e) {
-      if (token === state.matchToken) slot.innerHTML = noData('Corner statistics are temporarily unavailable.');
+      if (token === state.matchToken) { $('#corners-card')?.remove(); cleanupStatsSection(); }
     }
   }
 

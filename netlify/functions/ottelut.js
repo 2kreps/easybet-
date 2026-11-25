@@ -27,7 +27,24 @@ async function get(path, params = {}) {
 }
 
 // Same league whitelist as the original function (order = display priority).
-const MAJOR = [39, 140, 135, 78, 61, 2, 3, 848, 45, 143, 88, 94, 253, 262, 71, 72, 128, 239, 307, 556];
+const MAJOR = [
+  39,   // Premier League
+  140,  // La Liga
+  135,  // Serie A
+  78,   // Bundesliga
+  61,   // Ligue 1
+  2,    // UEFA Champions League
+  3,    // UEFA Europa League
+  848,  // UEFA Conference League
+  45,   // FA Cup
+  143,  // Copa del Rey
+  81,   // DFB-Pokal
+  48,   // EFL Cup
+  137,  // Coppa Italia
+  66,   // Coupe de France
+  88,   // Eredivisie
+  94    // Primeira Liga
+];
 const PRIORITY = new Map(MAJOR.map((id, i) => [id, i]));
 
 const json = (statusCode, body, cache) => ({
@@ -71,7 +88,7 @@ exports.handler = async (event) => {
           new Date(a.fixture.date) - new Date(b.fixture.date)
       );
 
-    return json(200, { response: response.slice(0, 80) }, 'public, max-age=60');
+    return json(200, { response: response.slice(0, 50) }, 'public, max-age=60');
   } catch (e) {
     return json(502, { message: e.message || 'Football data provider error' });
   }

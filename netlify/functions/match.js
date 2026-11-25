@@ -37,24 +37,32 @@ async function get(path, params = {}, retry = true) {
   return j.response || [];
 }
 
-// Recent matches: try `last`, then fall back to the team's season fixtures
-// (some API plans reject the `last` parameter).
+// Recent matches: use the provider's `last` query first. If the account plan
+// rejects the current season, try the seasons this plan explicitly supports.
 async function lastMatches(team, season) {
-  const attempts = [
-    () => get('/fixtures', { team, last: 20 }),
-    () => get('/fixtures', { team, last: 10 }),
-    () => get('/fixtures', { team, season }),
-  ];
-  let lastErr;
-  for (const attempt of attempts) {
+  try {
+    const r = await get('/fixtures', { team, last: 20 });
+    if (r.length) return r;
+  } catch (e) {
+    // fall through to permitted historical seasons
+  }
+
+  const requested = Number(season);
+  const seasons = [...new Set([requested, 2024, 2023, 2022])]
+    .filter((s) => Number.isInteger(s) && s >= 2022 && s <= 2024)
+    .sort((a, b) => b - a);
+  for (const yr of seasons) {
     try {
-      const r = await attempt();
-      if (r.length) return r;
+      const r = await get('/fixtures', { team, season: yr });
+      if (r.length) {
+        return r
+          .filter((f) => ['FT', 'AET', 'PEN'].includes(f?.fixture?.status?.short))
+          .sort((a, b) => new Date(b.fixture.date) - new Date(a.fixture.date));
+      }
     } catch (e) {
-      lastErr = e;
+      // This season is not available on the current provider plan; try the next.
     }
   }
-  if (lastErr) throw lastErr;
   return [];
 }
 
