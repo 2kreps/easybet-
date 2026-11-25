@@ -438,7 +438,7 @@
       ${heroHtml(f)}
 
       ${d.tips && d.tips.length ? `<section class="section">
-        <h2 class="sec-title">TOP BETTING TIPS · FAIR ODDS OVER 1.50</h2>
+        <h2 class="sec-title">TOP BETTING TIPS · 65%+ PROBABILITY</h2>
         ${tipsHtml(d)}
       </section>` : ''}
 
